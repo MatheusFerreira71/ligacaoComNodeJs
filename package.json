@@ -1,0 +1,34 @@
+{
+  "name": "ligacaocomnodejs",
+  "version": "1.0.0",
+  "description": "Uma aplicação onde avisará o desenvolvedor quando um servidor cair, porém com ligação de voz.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm-run-all -p server:*",
+    "server:1": "nodemon server1/server.js",
+    "server:2": "nodemon server2/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatheusFerreira71/ligacaoComNodeJs.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "Ligação",
+    "Call"
+  ],
+  "author": "MatheusFerreira71",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatheusFerreira71/ligacaoComNodeJs/issues"
+  },
+  "homepage": "https://github.com/MatheusFerreira71/ligacaoComNodeJs#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "npm-run-all": "^4.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.0"
+  }
+}
