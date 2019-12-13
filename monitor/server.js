@@ -2,6 +2,7 @@ const axios = require("axios");
 const TotalVoice = require("totalvoice-node");
 require('dotenv/config');
 const client = new TotalVoice(process.env.TOTALVOICE_API_KEY);
+console.log(process.env)
 
 const boss = {
     name: "Dilan.franca",
@@ -41,13 +42,15 @@ const notifications = [];
         }).catch(() => {
             console.log(`${server.name} está fora do ar!`);
             const message = `${server.developer.name}, o ${server.name} está fora do ar, 
-        por favor, faça algo o mais rápido o possível, digite um se você vai fazer algo 
-        ou dois se você não podefaze nada!`;
+                    por favor, faça algo o mais rápido o possível. Digite um se você vai fazer algo 
+                    ou dois se você não pode fazer nada!`;
+
             const options = {
                 velocidade: 2,
                 tipo_voz: "br-Vitoria",
                 resposta_usuario: true
             };
+
             client.tts.enviar(server.developer.telephone, message, options).then(response => {
                 notifications.push({
                     id: response.dados.id,
@@ -55,12 +58,13 @@ const notifications = [];
                     status: "pending",
                 });
             });
+
         });
     }
     console.log("Finalizando monitoramento dos servidores!");
 })();
 
-setInterval(async () => {
+setInterval(() => {
     for (const notification of notifications) {
         if (notification.status === "pending") {
             client.tts.buscar(notification.id).then(response => {
@@ -69,27 +73,30 @@ setInterval(async () => {
                 } else if (response.dados.resposta === "1") {
                     notification.status = 'success';
                     console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e vai fazer alguma coisa.`);
+                    
                     const message = `O ${notification.server.name} está fora do ar, o 
                     desenvolvedor ${notification.server.developer.name} já foi avisado e vai fazer alguma coisa.`;
+                    
                     const options = {
                         velocidade: 2,
                         tipo_voz: "br-Ricardo"
                     };
+
                     client.tts.enviar(boss.telephone, message, options);
                 } else if (response.dados.resposta === "2") {
                     notification.status = 'success';
                     console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e não pode fazer nada.`);
                     const message = `O ${notification.server.name} está fora do ar, o 
                     desenvolvedor ${notification.server.developer.name} já foi avisado e não pode fazer nada.`;
+
                     const options = {
                         velocidade: 2,
                         tipo_voz: "br-Ricardo"
                     };
+
                     client.tts.enviar(boss.telephone, message, options);
                 }
-            }).catch(() => {
-                console.log("Deu ruim");
             });
         }
     }
-}, 1000);
+}, 5000);
